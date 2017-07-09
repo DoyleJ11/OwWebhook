@@ -1,0 +1,346 @@
+using Discord;
+using Discord.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DiscoBot
+{
+    class MyBot
+    {
+        DiscordClient discord;
+        CommandService commands;
+
+        Random rand;
+
+        string[] FreshestMemes;
+        string[] randomTexts;
+        string[] owSupports;
+        string[] owOffense;
+        string[] owTank;
+        string[] owDefense;
+        string[] owAll;
+
+        public MyBot()
+        {
+            rand = new Random();
+
+            FreshestMemes = new string[]
+            {
+                "memes/meme1.jpg", //0
+                "memes/meme2.jpg", //1
+                "memes/meme3.jpg", //2
+                "memes/meme4.jpg", //3
+                "memes/meme5.jpg"  //4
+            };
+
+            randomTexts = new string[]
+                {
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6"
+                };
+
+            owSupports = new string[]
+            {
+                "Ana",
+                "Lucio",
+                "Mercy",
+                "symmetra",
+                "Zenyatta"
+
+
+            };
+
+            owOffense = new string[]
+            {
+                "Genji",
+                "Mccree",
+                "Pharah",
+                "Reaper",
+                "Soldier:76",
+                "Sombra",
+                "Tracer"
+            };
+
+            owTank = new string[]
+            {
+                "D.VA",
+                "Orisa",
+                "Reinhardt",
+                "Roadhog",
+                "Winston",
+                "Zarya"
+            };
+
+            owDefense = new string[]
+            {
+                "Bastion",
+                "Hanzo",
+                "Junkrat",
+                "Mei",
+                "Torbjörn",
+                "Widowmaker"
+            };
+
+            owAll = new string[]
+            {
+                "Ana",
+                "Lucio",
+                "Mercy",
+                "symmetra",
+                "Zenyatta",
+                "Genji",
+                "Mccree",
+                "Pharah",
+                "Reaper",
+                "Soldier:76",
+                "Sombra",
+                "Tracer",
+                "D.VA",
+                "Orisa",
+                "Reinhardt",
+                "Roadhog",
+                "Winston",
+                "Zarya",
+                "Bastion",
+                "Hanzo",
+                "Junkrat",
+                "Mei",
+                "Torbjörn",
+                "Widowmaker"
+            };
+
+            discord = new DiscordClient(x =>
+              {
+                  x.LogLevel = LogSeverity.Info;
+                  x.LogHandler = Log;
+              });
+
+            discord.UsingCommands(x =>
+            {
+                x.PrefixChar = '~';
+                x.AllowMentionPrefix = true;
+            });
+
+            commands = discord.GetService<CommandService>();
+
+            RegisterMemeCommand();
+            RegisterTextCommand();
+            RegisterPurgeCommand();
+            RegisterowSupportsCommand();
+            RegisterowOffenseCommand();
+            RegisterowTankCommand();
+            RegisterowDefenseCommand();
+            RegisterowAllCommand();
+            RegisterowRankBronzeCommand();
+            RegisterowRankSilverCommand();
+            RegisterowRankGoldCommand();
+            RegisterowRankPlatinumCommand();
+            RegisterowDPSCommand();
+            RegisterowSupportCommand();
+            RegisterowroleTankCommand();
+            RegisterowFlexCommand();
+
+            commands.CreateCommand("Robot Swear Word")
+                .Do(async (e) =>
+                {
+                    await e.Channel.SendTTSMessage("Biatch");
+                });
+
+            commands.CreateCommand("Hello Disco")
+                .Do(async (e) =>
+                {
+                   await e.Channel.SendMessage("Hi!");
+                });
+
+            commands.CreateCommand("How are you Disco?")
+                .Do(async (e) =>
+                {
+                    await e.Channel.SendMessage("Great! Thanks for asking.");
+                });
+
+            commands.CreateCommand("Help")
+                .Do(async (e) =>
+                {
+                    e.Channel.SendMessage("List of Disco Bot commands: ~purge (delete the last 10 messages)   ~dice (roll a 1-6 dice)    ~meme (Generate one out of 5 random memes. Dm for a meme to be added) ~Hello Disco (Disco will respond)  ~How are you Disco? (Disco will respond) ~owTank, ~owOffense, ~owDefense, ~owSupport (Depending on which class you select it will generate a random hero to play in that class.) ~owAll (Generate a random hero out of all of the classes.) More to be added soon!");
+                });
+
+            discord.ExecuteAndWait(async () =>
+            {
+                await discord.Connect("MzI2NTA2NzIyNzAzMzEwODUw.DCoL-g.wfIrKUMHdGMuAlPw-HAJOD_HKRQ", TokenType.Bot);
+            });
+        }
+
+        private void RegisterMemeCommand()
+        {
+            commands.CreateCommand("meme")
+                .Do(async (e) =>
+                {
+                    int randomMemeIndex = rand.Next(FreshestMemes.Length);
+                    string memeToPost = FreshestMemes[randomMemeIndex];
+                   await e.Channel.SendFile(memeToPost);
+                });
+        }
+
+        private void RegisterTextCommand()
+        {
+            commands.CreateCommand("dice")
+                .Do(async (e) =>
+                {
+                    int randomTextIndex = rand.Next(randomTexts.Length);
+                    string textToPost = randomTexts[randomTextIndex];
+                    await e.Channel.SendMessage(textToPost);
+                });
+        }
+
+        private void RegisterPurgeCommand()
+        {
+            commands.CreateCommand("purge")
+               .Do(async (e) =>
+            {
+                Message[] messagesToDelete;
+                messagesToDelete = await e.Channel.DownloadMessages(10);
+
+                await e.Channel.DeleteMessages(messagesToDelete);
+            });
+        }
+
+        private void RegisterowSupportsCommand()
+        {
+            commands.CreateCommand("owSupports")
+                .Do(async (e) =>
+                {
+                    int owSupportsIndex = rand.Next(owSupports.Length);
+                    string owSupportsToPost = owSupports[owSupportsIndex];
+                    await e.Channel.SendMessage(owSupportsToPost);
+                });
+        }
+
+        private void RegisterowOffenseCommand()
+        {
+            commands.CreateCommand("owOffense")
+                .Do(async (e) =>
+                {
+                    int owOffenseIndex = rand.Next(owOffense.Length);
+                    string owOffenseToPost = owOffense[owOffenseIndex];
+                    await e.Channel.SendMessage(owOffenseToPost);
+                });
+        }
+
+        private void RegisterowTankCommand()
+        {
+            commands.CreateCommand("owTank")
+                .Do(async (e) =>
+                {
+                    int owTankIndex = rand.Next(owTank.Length);
+                    string owTankToPost = owTank[owTankIndex];
+                    await e.Channel.SendMessage(owTankToPost);
+                });
+        }
+
+        private void RegisterowDefenseCommand()
+        {
+            commands.CreateCommand("owDefense")
+                .Do(async (e) =>
+                {
+                    int owDefenseIndex = rand.Next(owDefense.Length);
+                    string owDefenseToPost = owDefense[owDefenseIndex];
+                    await e.Channel.SendMessage(owDefenseToPost);
+                });
+        }
+
+        private void RegisterowAllCommand()
+        {
+            commands.CreateCommand("owAll")
+                .Do(async (e) =>
+                {
+                    int owAllIndex = rand.Next(owAll.Length);
+                    string owAllToPost = owAll[owAllIndex];
+                    await e.Channel.SendMessage(owAllToPost);
+                });
+        }
+
+        private void RegisterowRankBronzeCommand()
+        {
+            commands.CreateCommand("owRank Bronze")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Bronze").First());
+                });
+        }
+
+        private void RegisterowRankSilverCommand()
+        {
+            commands.CreateCommand("owRank Silver")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Silver").First());
+                });
+        }
+
+        private void RegisterowRankGoldCommand()
+        {
+            commands.CreateCommand("owRank Gold")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Gold").First());
+                });
+        }
+
+        private void RegisterowRankPlatinumCommand()
+        {
+            commands.CreateCommand("owRank Platinum")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Platinum").First());
+                });
+        }
+
+        private void RegisterowDPSCommand()
+        {
+            commands.CreateCommand("owRole DPS")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("DPS").First());
+                });
+        }
+
+        private void RegisterowSupportCommand()
+        {
+            commands.CreateCommand("owRole Support")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Support").First());
+                });
+        }
+
+        private void RegisterowroleTankCommand()
+        {
+            commands.CreateCommand("owRole Tank")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Tank").First());
+                });
+        }
+
+        private void RegisterowFlexCommand()
+        {
+            commands.CreateCommand("owRole Flex")
+                .Do(async (e) =>
+                {
+                    await e.User.AddRoles(e.Server.FindRoles("Flex").First());
+                });
+        }
+
+        private void Log(object sender, LogMessageEventArgs e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+}
